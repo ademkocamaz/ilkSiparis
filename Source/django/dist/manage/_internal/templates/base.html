@@ -1,0 +1,147 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ilkSipariş</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
+  <!-- Bootstrap JS -->
+  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+  <!-- jQuery -->
+  <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+  <!-- FontAwesome -->
+  <link href="{% static 'css/fontawesome.min.css' %}" rel="stylesheet" />
+  <link href="{% static 'css/brands.min.css' %}" rel="stylesheet" />
+  <link href="{% static 'css/solid.min.css' %}" rel="stylesheet" />
+  <!-- DataTables -->
+  <link href="{% static 'css/datatables.min.css' %}" rel="stylesheet">
+  <script src="{% static 'js/datatables.min.js' %}"></script>
+  <!-- Select2 -->
+  <link href="{% static 'css/select2.min.css' %}" rel="stylesheet">
+  <script src="{% static 'js/select2.min.js' %}"></script>
+  <script src="{% static 'js/i18n/tr.js' %}"></script>
+  <!-- Django Crispy Formset Modal -->
+  <script src="{% static 'js/crispy-formset-modal.min.js' %}"></script>
+  <!-- Moment -->
+  <script src="{% static 'js/moment-with-locales.min.js' %}"></script>
+
+</head>
+
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'index' %}">
+          ilkSipariş
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+          aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav">
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{% url 'index' %}"><i class="fa-solid fa-house"></i>
+                Anasayfa</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <i class="fa-solid fa-address-book"></i> CARİ
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'current' %}">
+                    <i class="fa-solid fa-address-book"></i> Cari Kartlar</a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <i class="fa-solid fa-box-open"></i> STOK
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'stock' %}"><i class="fa-solid fa-box-open"></i> Stok
+                    Kartları</a></li>
+                <li><a class="dropdown-item" href="{% url 'stock_unit' %}"><i class="fa-solid fa-boxes-stacked"></i>
+                    Birim Kartları</a></li>
+                <li><a class="dropdown-item" href="{% url 'stock_type' %}"><i class="fa-solid fa-box"></i> Tip
+                    Kartları</a></li>
+                <li><a class="dropdown-item" href="{% url 'stock_tax_set' %}"><i class="fa-solid fa-percent"></i> Vergi
+                    Oranı Kartları</a></li>
+                <li><a class="dropdown-item" href="{% url 'stock_model' %}"><i class="fa-solid fa-parachute-box"></i>
+                    Model Kartları</a></li>
+                <li><a class="dropdown-item" href="{% url 'stock_color' %}"><i class="fa-solid fa-palette"></i> Renk
+                    Kartları</a></li>
+                <li><a class="dropdown-item" href="{% url 'stock_category' %}"><i class="fa-solid fa-list"></i> Kategori
+                    Kartları</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <i class="fa-solid fa-clipboard-check"></i> SİPARİŞ
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'order' %}"><i class="fa-solid fa-clipboard-check"></i> Siparişler</a></li>
+                <li><a class="dropdown-item" href="{% url 'order_state' %}"><i class="fa-solid fa-check"></i> Sipariş Durum Kartları</a></li>
+                <li><a class="dropdown-item" href="{% url 'order_line_currency' %}"><i class="fa-solid fa-money-check-dollar"></i> Para Birimi Kartları</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <i class="fa-solid fa-user"></i> {{ user }}
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'profile' %}"><i class="fa-solid fa-address-card"></i>
+                    Profil</a></li>
+                <li><a class="dropdown-item" href="{% url 'reset_password' %}"><i class="fa-solid fa-key"></i> Şifre
+                    Değiştir</a></li>
+                {% comment %} <li>
+                  <hr class="dropdown-divider">
+                </li> {% endcomment %}
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="javascript:{document.getElementById('logout').submit()}"><i
+                  class="fa-solid fa-right-from-bracket"></i> Oturumu Kapat</a>
+              <form id="logout" action="{% url 'logout' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden">
+              </form>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <div class="container mt-4">
+      {% include 'partials/_alert.html' %}
+      {% block content %}
+      {% endblock %}
+      <div class="d-flex justify-content-center mt-4">
+        <button class="btn btn-danger" onclick="history.back()">Geri</button>
+      </div>
+    </div>
+  </main>
+  <footer class="mt-5">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+      <p>{% include 'partials/_version.html' %}</p>
+      <p><strong><a href="https://ilkadam.com.tr" target="_blank">İLKADAM YAZILIM VE BİLİŞİM TEKNOLOJİLERİ</a></strong></p>
+      <a href="{% url 'admin:index' %}" class="btn btn-success" target="_blank">Yönetici Paneli</a>
+    </div>
+  </footer>
+
+  <!-- ilkSipariş -->
+  <script src="{% static 'js/ilksiparis.js' %}"></script>
+</body>
+
+</html>

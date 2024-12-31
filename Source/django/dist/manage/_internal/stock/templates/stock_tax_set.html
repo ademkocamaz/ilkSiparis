@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+  <div class="modal fade" id="stock_tax_setModal" tabindex="-1" aria-labelledby="stock_tax_setModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="stock_tax_setModalLabel">Yeni Vergi Oranı</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{% url 'stock_tax_set' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ stock_tax_set_form|crispy }}
+            <button class="btn btn-dark my-4" type="submit">Kaydet</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">İptal</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h3 id="title" class="card-title">
+            <i class="fa-solid fa-percent"></i>
+            Vergi Oranı Kartları
+            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#stock_tax_setModal">
+              <i class="fa-regular fa-file"></i>
+              Yeni
+            </button>
+            <div class="float-end">
+              <button class="btn btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseStockTaxSet" aria-expanded="false" aria-controls="collapseStockTaxSet"><i class="fa-solid fa-minus"></i></button>
+            </div>
+          </h3>
+        </div>
+        <div class="collapse show" id="collapseStockTaxSet">
+          <div class="card-body">
+            {% if stock_tax_sets %}
+              <table id="stock_tax_set" class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Adı</th>
+                    <th scope="col">Oran</th>
+                    <th scope="col">Düzenleyen</th>
+                    <th scope="col">İşlemler</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for stock_tax_set in stock_tax_sets %}
+                    <tr class="bg-gradient">
+                      <th scope="row">{{ forloop.counter }}</th>
+                      <td>{{ stock_tax_set.name }}</td>
+                      <td>{{ stock_tax_set.rate }}</td>
+                      <td>
+                        {% if stock_tax_set.user is not None %}
+                          {{ stock_tax_set.user }}
+                        {% else %}
+                          -
+                        {% endif %}
+                      </td>
+                      <td>
+                        <a href="{% url 'stock_tax_set_detail' stock_tax_set.id %}" class="btn btn-dark bg-gradient" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-title="Detaylar" data-bs-content="Seçili satırdaki kaydın detaylarını görüntüler."><i class="fa-solid fa-circle-info"></i></a>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            {% else %}
+              <div class="alert alert-warning">
+                <p>Lütfen Stok Vergi Oranı Kartı ekleyiniz.</p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    $('#stock_tax_set').DataTable({
+      ordering: true,
+      responsive: true,
+      dom: 'Bflrtip',
+      buttons: true,
+      language: {
+        url: "{% static 'js/datatables_tr.json' %}"
+      }
+    });
+  </script>
+{% endblock %}

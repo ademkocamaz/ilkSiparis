@@ -1,0 +1,116 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ title }}</title>
+    <!-- Bootstrap CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" media="all" />
+    <!-- Bootstrap JS -->
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <!-- jQuery -->
+    <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+  </head>
+  <body>
+    <main>
+      <div>
+        <div class="row mt-3">
+          <div class="col">
+            <h1>Sipariş</h1>
+          </div>
+        </div>
+        {% if order %}
+          <div class="row mt-3">
+            <div class="col">Cari: {{ order.order_current }}</div>
+            <div class="col">Tarih: {{ order.date }}</div>
+          </div>
+          <div class="row mt-3">
+            <div class="col">Sipariş No: {{ order.number }}</div>
+            <div class="col">Fatura No: {{ order.invoice_number }}</div>
+          </div>
+          <div class="row mt-3">
+            <div class="col">
+              <table id="order_lines" class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Stok</th>
+                    <th scope="col">Miktar</th>
+                    <th scope="col">Birim</th>
+                    <th scope="col">Şehir</th>
+                    <th scope="col">Ülke</th>
+                    <th scope="col">İlgili Müşteri</th>
+                    <th scope="col">Açıklama</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for order_line in order_lines %}
+                    <tr class="bg-gradient">
+                      <th scope="row">{{ forloop.counter }}</th>
+                      <td>
+                        {% if order_line.order_line_stock is not None %}
+                          {{ order_line.order_line_stock }}
+                        {% else %}
+                          -
+                        {% endif %}
+                      </td>
+                      <td>
+                        {% if order_line.quantity is not None %}
+                          {{ order_line.quantity }}
+                        {% else %}
+                          -
+                        {% endif %}
+                      </td>
+                      <td>
+                        {% if order_line.unit is not None %}
+                          {{ order_line.unit }}
+                        {% else %}
+                          -
+                        {% endif %}
+                      </td>
+                      <td>
+                        {% if order_line.city is not None %}
+                          {{ order_line.city }}
+                        {% else %}
+                          -
+                        {% endif %}
+                      </td>
+                      <td>
+                        {% if order_line.country is not None %}
+                          {{ order_line.country }}
+                        {% else %}
+                          -
+                        {% endif %}
+                      </td>
+                      <td>
+                        {% if order_line.related_person is not None %}
+                          {{ order_line.related_person }}
+                        {% else %}
+                          -
+                        {% endif %}
+                      </td>
+                      <td>
+                        {% if order_line.description is not None %}
+                          {{ order_line.description }}
+                        {% else %}
+                          -
+                        {% endif %}
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </main>
+    <footer></footer>
+    <script>
+      $(document).ready(function () {
+        window.print()
+      })
+    </script>
+  </body>
+</html>

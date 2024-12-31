@@ -1,0 +1,47 @@
+{% load i18n %}
+
+<div id="{{ dialog_id }}" class="modal cfm" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg w-100">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{% trans 'Edit' %}</h5>
+        <button type="button" data-formset-modal-toggle="{{ dialog_id }}" class="cmf-close btn-close" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {% block body %}
+
+        {% endblock %}
+      </div>
+      <div class="modal-footer d-flex justify-content-between">
+        <button type="button" class="btn btn-danger cfm-delete" data-formset-modal-toggle="{{ dialog_id }}" data-formset-delete-button>{% trans 'Delete' %}</button>
+        <button type="button" class="btn btn-secondary cfm-close" data-formset-modal-toggle="{{ dialog_id }}">{% trans 'Close' %}</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $('.modal-content .modal-body .select').select2({
+    language: 'tr',
+    placeholder: '---------',
+    width: '100%',
+    dropdownParent: $('.modal-content .modal-body')
+  })
+  document.querySelectorAll('input').forEach(function (el) {
+    let match = el.name.match(/(?<form>\w+)-(?<number>\w+)-(?<name>\w+)/)
+    if (match) {
+      let name = match.groups.name
+      //console.log(match.groups)
+      if (name === 'unit_price') {
+        if ($("input[id$='" + match.groups.number + "-unit_price']").length) {
+          $("input[id$='" + match.groups.number + "-unit_price']").keyup(function () {
+            $("input[id$='" + match.groups.number + "-total_price']").val(
+              parseFloat($("input[id$='" + match.groups.number + "-unit_price']").val()) * parseFloat($("input[id$='" + match.groups.number + "-quantity']").val()))
+          })
+        }
+      }
+    }
+  })
+  /*$("input[id$='0-unit_price']").keyup(function () {
+          $("input[id$='0-total_price']").val(parseFloat($("input[id$='0-quantity']").val()) * parseFloat($("input[id$='0-unit_price']").val()))
+        })*/
+</script>

@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+  <div class="modal fade" id="currentModal" tabindex="-1" aria-labelledby="currentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="currentModalLabel">Yeni Cari</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{% url 'current' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ current_form|crispy }}
+            <button class="btn btn-dark my-4" type="submit">Kaydet</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">İptal</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h3 id="title" class="card-title">
+            <i class="fa-solid fa-address-book"></i>
+            Cari Kartlar
+            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#currentModal">
+              <i class="fa-regular fa-file"></i>
+              Yeni
+            </button>
+            <div class="float-end">
+              <button class="btn btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCurrent" aria-expanded="false" aria-controls="collapseCurrent"><i class="fa-solid fa-minus"></i></button>
+            </div>
+          </h3>
+        </div>
+        <div class="collapse show" id="collapseCurrent">
+          <div class="card-body">
+            {% if currents %}
+              <table id="current" class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Müşteri/Firma Adı</th>
+                    <th scope="col">Ünvan 1</th>
+                    <th scope="col">Ünvan 2</th>
+                    <th scope="col">Vergi No</th>
+                    <th scope="col">Vergi Dairesi</th>
+                    <th scope="col">Telefon</th>
+                    <th scope="col">Düzenleyen</th>
+                    <th scope="col">İşlemler</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for current in currents %}
+                    <tr class="bg-gradient" style="background-color: {{ process.state.color }}">
+                      <th scope="row">{{ forloop.counter }}</th>
+                      <td>{{ current.name }}</td>
+                      <td>
+                        {% if current.title1 is not None %}
+                          {{ current.title1 }}
+                        {% else %}
+                          -
+                        {% endif %}
+                      </td>
+                      <td>
+                        {% if current.title2 is not None %}
+                          {{ current.title2 }}
+                        {% else %}
+                          -
+                        {% endif %}
+                      </td>
+                      <td>
+                        {% if current.tax_id is not None %}
+                          {{ current.tax_id }}
+                        {% else %}
+                          -
+                        {% endif %}
+                      </td>
+                      <td>
+                        {% if current.tax_authority is not None %}
+                          {{ current.tax_authority }}
+                        {% else %}
+                          -
+                        {% endif %}
+                      </td>
+                      <td>
+                        {% if current.phone is not None %}
+                          {{ current.phone }}
+                        {% else %}
+                          -
+                        {% endif %}
+                      </td>
+                      <td>
+                        {% if current.user is not None %}
+                          {{ current.user }}
+                        {% else %}
+                          -
+                        {% endif %}
+                      </td>
+                      <td>
+                        <a href="{% url 'current_detail' current.id %}" class="btn btn-dark bg-gradient" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-title="Detaylar" data-bs-content="Seçili satırdaki kaydın detaylarını görüntüler."><i class="fa-solid fa-circle-info"></i></a>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            {% else %}
+              <div class="alert alert-warning">
+                <p>Lütfen Cari Kart ekleyiniz.</p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    $('#current').DataTable({
+      ordering: true,
+      responsive: true,
+      dom: 'Bflrtip',
+      buttons: true,
+      language: {
+        url: "{% static 'js/datatables_tr.json' %}"
+      }
+    });
+  </script>
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+  <div class="modal fade" id="order_stateModal" tabindex="-1" aria-labelledby="order_stateModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="order_stateModalLabel">Yeni Sipariş Durum Kartı</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{% url 'order_state' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ order_state_form|crispy }}
+            <button class="btn btn-dark my-4" type="submit">Kaydet</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">İptal</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h3 id="title" class="card-title">
+            <i class="fa-solid fa-palette"></i>
+            Sipariş Durum Kartları
+            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#order_stateModal">
+              <i class="fa-regular fa-file"></i>
+              Yeni
+            </button>
+            <div class="float-end">
+              <button class="btn btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOrderState" aria-expanded="false" aria-controls="collapseOrderState"><i class="fa-solid fa-minus"></i></button>
+            </div>
+          </h3>
+        </div>
+        <div class="collapse show" id="collapseOrderState">
+          <div class="card-body">
+            {% if order_states %}
+              <table id="order_state" class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Adı</th>
+                    <th scope="col">Düzenleyen</th>
+                    <th scope="col">İşlemler</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for order_state in order_states %}
+                    <tr class="bg-gradient">
+                      <th scope="row">{{ forloop.counter }}</th>
+                      <td>{{ order_state.name }}</td>
+                      <td>
+                        {% if order_state.user is not None %}
+                          {{ order_state.user }}
+                        {% else %}
+                          -
+                        {% endif %}
+                      </td>
+                      <td>
+                        <a href="{% url 'order_state_detail' order_state.id %}" class="btn btn-dark bg-gradient" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-title="Detaylar" data-bs-content="Seçili satırdaki kaydın detaylarını görüntüler."><i class="fa-solid fa-circle-info"></i></a>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            {% else %}
+              <div class="alert alert-warning">
+                <p>Lütfen Sipariş Durum Kartı ekleyiniz.</p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    $('#order_state').DataTable({
+      ordering: true,
+      responsive: true,
+      dom: 'Bflrtip',
+      buttons: true,
+      language: {
+        url: "{% static 'js/datatables_tr.json' %}"
+      }
+    });
+  </script>
+{% endblock %}

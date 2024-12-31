@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<form action="{% url 'order_line_currency_detail' order_line_currency_form.instance.id %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{order_line_currency_form|crispy}}
+    <button class="btn btn-dark my-4" type="submit">Güncelle</button>
+</form>
+{% endblock %}
