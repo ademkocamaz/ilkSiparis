@@ -87,11 +87,13 @@ WSGI_APPLICATION = "core.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+from os import path, getenv
 
+db_path = path.join(getenv("LOCALAPPDATA"), "ilksiparis")
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": path.join(db_path, "db.sqlite3"),
     }
 }
 

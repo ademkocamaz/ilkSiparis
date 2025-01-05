@@ -70,7 +70,7 @@
  [],
  False,
  False,
- 1735636312,
+ 1735989114,
  [('run.exe',
    'C:\\Users\\Adem\\Documents\\GitHub\\ilkSiparis\\Source\\django\\venv\\Lib\\site-packages\\PyInstaller\\bootloader\\Windows-64bit-intel\\run.exe',
    'EXECUTABLE')],

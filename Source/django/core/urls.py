@@ -18,6 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from core import views
+from baton.models import BatonTheme
 
 urlpatterns = [
     path(route="", view=views.index, name="index"),
@@ -30,3 +31,4 @@ urlpatterns = [
 ]
 
 admin.site.site_url=None
+admin.site.unregister(BatonTheme)
