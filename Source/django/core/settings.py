@@ -163,3 +163,7 @@ from django.contrib.messages import constants as messages
 MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
+
+DJANGO_SUPERUSER_USERNAME="ilkadam"
+DJANGO_SUPERUSER_PASSWORD="ilkadam"
+DJANGO_SUPERUSER_EMAIL="info@ilkadam.com.tr"
