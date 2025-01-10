@@ -25,7 +25,7 @@ def current(request):
         return redirect("current")
 
     current_form = CurrentForm()
-    currents = Current.objects.order_by("-created")
+    currents = Current.objects.filter(user=request.user).order_by("created")
     context = {"current_form": current_form, "currents": currents}
     return render(request=request, template_name="current.html", context=context)
 

@@ -37,7 +37,7 @@ def order(request):
 
     order_form = OrderForm()
 
-    orders = Order.objects.order_by("created")
+    orders = Order.objects.filter(user=request.user).order_by("created")
     context = {
         "order_form": order_form,
         "orders": orders,
@@ -110,7 +110,7 @@ def order_state(request):
 
     order_state_form = OrderStateForm()
 
-    order_states = OrderState.objects.order_by("created")
+    order_states = OrderState.objects.filter(user=request.user).order_by("created")
     context = {
         "order_state_form": order_state_form,
         "order_states": order_states,
@@ -169,7 +169,9 @@ def order_line_currency(request):
 
     order_line_currency_form = OrderLineCurrencyForm()
 
-    order_line_currencies = OrderLineCurrency.objects.order_by("created")
+    order_line_currencies = OrderLineCurrency.objects.filter(
+        user=request.user
+    ).order_by("created")
     context = {
         "order_line_currency_form": order_line_currency_form,
         "order_line_currencies": order_line_currencies,

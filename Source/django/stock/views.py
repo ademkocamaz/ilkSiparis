@@ -39,7 +39,7 @@ def stock(request):
         return redirect("stock")
 
     stock_form = StockForm()
-    stocks = Stock.objects.order_by("created")
+    stocks = Stock.objects.filter(user=request.user).order_by("created")
     context = {
         "stock_form": stock_form,
         "stocks": stocks,
@@ -91,7 +91,7 @@ def stock_unit(request):
         return redirect("stock_unit")
 
     stock_unit_form = StockUnitForm()
-    stock_units = StockUnit.objects.order_by("created")
+    stock_units = StockUnit.objects.filter(user=request.user).order_by("created")
     context = {
         "stock_unit_form": stock_unit_form,
         "stock_units": stock_units,
@@ -149,7 +149,7 @@ def stock_type(request):
         return redirect("stock_type")
 
     stock_type_form = StockTypeForm()
-    stock_types = StockType.objects.order_by("created")
+    stock_types = StockType.objects.filter(user=request.user).order_by("created")
     context = {
         "stock_type_form": stock_type_form,
         "stock_types": stock_types,
@@ -209,7 +209,7 @@ def stock_tax_set(request):
         return redirect("stock_tax_set")
 
     stock_tax_set_form = StockTaxSetForm()
-    stock_tax_sets = StockTaxSet.objects.order_by("created")
+    stock_tax_sets = StockTaxSet.objects.filter(user=request.user).order_by("created")
     context = {
         "stock_tax_set_form": stock_tax_set_form,
         "stock_tax_sets": stock_tax_sets,
@@ -267,7 +267,7 @@ def stock_model(request):
         return redirect("stock_model")
 
     stock_model_form = StockModelForm()
-    stock_models = StockModel.objects.order_by("created")
+    stock_models = StockModel.objects.filter(user=request.user).order_by("created")
     context = {
         "stock_model_form": stock_model_form,
         "stock_models": stock_models,
@@ -325,7 +325,7 @@ def stock_color(request):
         return redirect("stock_color")
 
     stock_color_form = StockColorForm()
-    stock_colors = StockColor.objects.order_by("created")
+    stock_colors = StockColor.objects.filter(user=request.user).order_by("created")
     context = {
         "stock_color_form": stock_color_form,
         "stock_colors": stock_colors,
@@ -381,7 +381,7 @@ def stock_category(request):
         return redirect("stock_category")
 
     stock_category_form = StockCategoryForm()
-    stock_categories = StockCategory.objects.order_by("created")
+    stock_categories = StockCategory.objects.filter(user=request.user).order_by("created")
     context = {
         "stock_category_form": stock_category_form,
         "stock_categories": stock_categories,

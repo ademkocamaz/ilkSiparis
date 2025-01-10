@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.contrib import auth
+from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from user.forms import ProfileForm, ResetPasswordForm
@@ -24,6 +25,33 @@ def login(request):
             )
 
     return render(request, "login.html")
+
+def register(request):
+    if request.method=='POST':
+        username=request.POST['username']
+        email=request.POST['email']
+        password=request.POST['password']
+        repassword=request.POST['repassword']
+
+        if password==repassword:
+            if User.objects.filter(username=username).exists():
+                messages.add_message(request,messages.WARNING,username+' Kullanıcı adı sistemde kayıtlı.')
+                return redirect('register')
+            else:
+                if User.objects.filter(email=email).exists():
+                    messages.add_message(request,messages.WARNING,email+' E-mail adresi sistemde kayıtlı.')
+                    return redirect('register')
+                else:
+                    user=User.objects.create_user(username=username,email=email,password=password)
+                    user.save()
+                    messages.add_message(request,messages.SUCCESS,username+' Hesabınız başarıyla oluşturuldu')
+                    return redirect('login')
+        else:
+            messages.add_message(request,messages.ERROR,'Parolalar eşleşmiyor')
+            return redirect('register')
+
+    return render(request,'register.html')
+
 
 @login_required(login_url="/user/login/")
 def logout(request):
