@@ -1,0 +1,12 @@
+[Unit]
+Description=ilkFlow Service
+After=network.target
+
+[Service]
+Restart=always
+User=adem
+Group=adem
+ExecStart=/bin/bash /home/adem/ilkSiparis.sh
+
+[Install]
+WantedBy=default.target
